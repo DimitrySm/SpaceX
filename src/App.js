@@ -1,26 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Header from "./components/Header/Header";
+import Main from "./components/Main/Main";
+import Features from "./components/Features/Features";
+import Footer from "./components/Footer/Footer";
+
+import FetchData from "./service/FetchData";
+
+import "./style.css";
+
+class App extends React.Component {
+  fetchData = new FetchData();
+
+  state = {
+    rocket: "Falcone 1",
+    rocketFeatures: null,
+    rockets: [],
+  };
+
+  componentDidMount() {
+    this.updateRocket();
+  }
+
+  updateRocket() {
+    this.fetchData
+      .getRocket()
+      .then((data) => {
+        this.setState({ rockets: data.map((item) => item.name) });
+        return data;
+      })
+      .then((data) => data.find((item) => item.name === this.state.rocket))
+      .then((rocketFeatures) => this.setState({ rocketFeatures }));
+  }
+
+  changeRocket = (rocket) => {
+    this.setState(
+      {
+        rocket,
+      },
+      this.updateRocket
+    );
+  };
+
+  render() {
+    console.log(this.state);
+    return (
+      <>
+        <Header rockets={this.state.rockets} changeRocket={this.changeRocket} />
+        <Main rocket={this.state.rocket} />
+        <Features />
+        <Footer />
+      </>
+    );
+  }
 }
 
 export default App;
