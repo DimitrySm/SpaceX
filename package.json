@@ -1,5 +1,6 @@
 {
   "name": "spacex",
+  "homepage": "https://dimitrysm.github.io/SpaceX",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
